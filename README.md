@@ -23,6 +23,7 @@ get requiest to '/books/search?description=' - search book by keyword in descrip
 ```
 get requiest to '/books/all' - show list of books with all info  
 get requiest to '/books/list' - show books titles and id  
+get requiest to '/books/list/page/:id' - get page with books (3 books on page)
 get requiest to '/books/:id' - show detailed info for selected book  
 ```
 
