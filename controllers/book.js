@@ -124,9 +124,9 @@ getPages = function(req, res){
             return res.sendStatus(500);
         }
         var page = [];
-        for(var i = 0; i < 3; i++){
+        for(var i = 0; i < 3; i++){var send = [];
             if(data[3 * Number(req.params.id) + i] != null)
-                page.push(data[3 * Number(req.params.id) + i]);
+                page.push({_id: data[3 * Number(req.params.id) + i]._id, title: data[3 * Number(req.params.id) + i].title});
         }
         res.send(page);
     });
