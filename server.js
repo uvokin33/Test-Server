@@ -18,7 +18,20 @@ app.delete('/:id', book.delete);
 
 app.get('/search', book.search);
 
-app.get('/', book.get);
+app.get('/', function(req, res){
+    var info = {
+        add: 'post to /',
+        update: 'put to /:id',
+        delete: 'delete to /:id',
+        search: '/search - ?(description or author, publisher, year)',
+        all: '/all',
+        booksByTitles: '/list',
+        getByID: '/books/:id'
+    };
+    res.send(info);
+});
+
+app.get('/all', book.get);
 app.get('/list', book.getTitles);
 app.get('/books/:id', book.getByID);
 

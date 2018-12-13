@@ -122,7 +122,7 @@ book_dictionary = function(req){
         author: req.body.author,
         publisher: req.body.publisher,
         year: req.body.year,
-        sheets: req.body.sheets
+        pages: req.body.pages
     }
 
     if(book.title == null)
@@ -137,8 +137,8 @@ book_dictionary = function(req){
         book.publisher = 'unknown';
     if(book.year == null)
         book.year = 'unknown';
-    if(book.sheets == null)
-        book.sheets = 'unknown';
+    if(book.pages == null)
+        book.pages = 'unknown';
 
     return book;
 }
