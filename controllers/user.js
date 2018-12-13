@@ -26,23 +26,32 @@ getByID = function(req, res){
 }
 
 register = function(req, res){
-    database.get().collection(collection).insertOne(user_dictionary(req), function(error, result){
+    database.get().collection(collection).find({login: req.body.login}).toArray(function(error, data){
         if(error){
             console.log(error);
             return res.sendStatus(500);
         }
-        res.sendStatus(200);
+        console.log(data);
+        if(data.length == 0){
+            database.get().collection(collection).insertOne(user_dictionary(req), function(error, result){
+                if(error){
+                    console.log(error);
+                    return res.sendStatus(500);
+                }
+                res.sendStatus(200);
+            });
+        }else
+            res.sendStatus(500);        
     });
 }
 
 authorisation = function(req, res){
-    console.log(req.body.login, req.body.password);
-    database.get().collection(collection).findOne({login: req.body.login, password: req.body.password}, function(error, result){
+    database.get().collection(collection).find({login: req.body.login, password: req.body.password}).toArray(function(error, result){
         if(error){
             console.log(error);
-            res.sendStatus(500);
+            return res.sendStatus(500);
         }
-        res.sendStatus(200)
+        res.send(result);
     });
 }
 
