@@ -124,7 +124,12 @@ getPages = function(req, res){
             return res.sendStatus(500);
         }
         var page = [];
+<<<<<<< HEAD
         for(var i = 0; i < 3; i++){var send = [];
+=======
+        for(var i = 0; i < 3; i++){
+            console.log(3 * Number(req.params.id) + i);
+>>>>>>> parent of 9d1c541... Update book.js
             if(data[3 * Number(req.params.id) + i] != null)
                 page.push({_id: data[3 * Number(req.params.id) + i]._id, title: data[3 * Number(req.params.id) + i].title});
         }
