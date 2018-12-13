@@ -125,7 +125,6 @@ getPages = function(req, res){
         }
         var page = [];
         for(var i = 0; i < 3; i++){
-            console.log(3 * Number(req.params.id) + i);
             if(data[3 * Number(req.params.id) + i] != null)
                 page.push(data[3 * Number(req.params.id) + i]);
         }
