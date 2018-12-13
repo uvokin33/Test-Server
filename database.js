@@ -4,16 +4,16 @@ const state = {
     database: null
 };
 
-exports.connect = function(url, collection, done) {
+exports.connect = function(url, name, status) {
     if(state.database)
-        return done();
+        return status();
 
     MongoClient.connect(url, {useNewUrlParser: true}, function(error, database){
         if(error)
-            return done(error);
+            return status(error);
         
-        state.database = database.db(collection);
-        done();
+        state.database = database.db(name);
+        status();
     });
 }
 
