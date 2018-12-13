@@ -1,9 +1,11 @@
 const ObjectID = require('mongodb').ObjectID;
+const express = require('express');
+const router = express.Router();
 const database = require('../database');
 
 const collection = 'books';
 
-exports.get = function(req, res) {
+get = function(req, res) {
     database.get().collection(collection).find().toArray(function(error, data) {
         if(error){
             console.log(error);
@@ -13,7 +15,7 @@ exports.get = function(req, res) {
     });
 }
 
-exports.getTitles = function(req, res) {
+getTitles = function(req, res) {
     database.get().collection(collection).find().toArray(function(error, data) {
         if(error){
             console.log(error);
@@ -27,7 +29,8 @@ exports.getTitles = function(req, res) {
     });
 }
 
-exports.getByID = function(req, res){
+getByID = function(req, res){
+    console.log(req.params.id);
     database.get().collection(collection).findOne({_id: ObjectID(req.params.id)}, function(error, data){
         if(error){
             console.log(error);
@@ -38,7 +41,7 @@ exports.getByID = function(req, res){
     });
 }
 
-exports.search = function(req, res){
+search = function(req, res){
     const author = req.query.author;
     const publisher = req.query.publisher;
     const year = req.query.year;
@@ -82,7 +85,7 @@ exports.search = function(req, res){
     }
 }
 
-exports.add = function(req, res){
+add = function(req, res){
     database.get().collection(collection).insertOne(book_dictionary(req), function(error, result){
         if(error){
             console.log(error);
@@ -92,7 +95,7 @@ exports.add = function(req, res){
     });
 }
 
-exports.update = function(req, res){
+update = function(req, res){
     var book = book_dictionary(req);
     
     database.get().collection(collection).updateOne({_id: ObjectID(req.params.id)}, {$set: book_dictionary(req)}, function(error, result){
@@ -104,7 +107,7 @@ exports.update = function(req, res){
     });
 }
 
-exports.delete = function(req, res){
+deleteBook = function(req, res){
     database.get().collection(collection).deleteOne({_id: ObjectID(req.params.id)}, function(error, result){
         if(error){
             console.log(error);
@@ -142,3 +145,14 @@ book_dictionary = function(req){
 
     return book;
 }
+
+router.post('/', add);
+router.put('/:id', update);
+router.delete('/:id', deleteBook);
+
+router.get('/search', search);
+router.get('/all', get);
+router.get('/list', getTitles);
+router.get('/:id', getByID);
+
+module.exports = router;
