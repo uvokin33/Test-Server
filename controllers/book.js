@@ -117,6 +117,22 @@ deleteBook = function(req, res){
     });
 }
 
+getPages = function(req, res){
+    database.get().collection(collection).find().toArray(function(error, data){
+        if(error){
+            console.log(error);
+            return res.sendStatus(500);
+        }
+        var page = [];
+        for(var i = 0; i < 3; i++){
+            console.log(3 * Number(req.params.id) + i);
+            if(data[3 * Number(req.params.id) + i] != null)
+                page.push(data[3 * Number(req.params.id) + i]);
+        }
+        res.send(page);
+    });
+}
+
 book_dictionary = function(req){
     var book = {
         title: req.body.title,
@@ -125,7 +141,11 @@ book_dictionary = function(req){
         author: req.body.author,
         publisher: req.body.publisher,
         year: req.body.year,
-        pages: req.body.pages
+        pages: req.body.pages,
+        feedback: {
+            text: req.body.feedback.text,
+            rating: req.body.feedback.rating
+        }
     }
 
     if(book.title == null)
@@ -153,6 +173,7 @@ router.delete('/:id', deleteBook);
 router.get('/search', search);
 router.get('/all', get);
 router.get('/list', getTitles);
+router.get('/list/page/:id', getPages);
 router.get('/:id', getByID);
 
 module.exports = router;
