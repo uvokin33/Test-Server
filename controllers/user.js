@@ -1,5 +1,6 @@
 const ObjectID = require('mongodb').ObjectID;
 const express = require('express');
+const session = require('express-session');
 const router = express.Router();
 const database = require('../database');
 
@@ -51,7 +52,14 @@ authorisation = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
+        req.session.user = result[0]._id;
         res.send(result);
+        req.session.save(function(error){
+            if(error){
+                console.log(error);
+                return res.sendStatus(500);
+            }
+        });
     });
 }
 
@@ -90,4 +98,7 @@ router.post('/login', authorisation);
 router.put('/:id', update);
 router.delete('/:id', deleteUser);
 
-module.exports = router;
+module.exports = {
+    router,
+    session
+};
