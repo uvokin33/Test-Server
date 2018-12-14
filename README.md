@@ -5,6 +5,7 @@
 ```
 git clone https://github.com/uvokin33/Test-Server.git 
 npm install test-server
+npm start
 ```
 
 ## Usage ##
