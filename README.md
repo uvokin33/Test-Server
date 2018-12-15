@@ -6,9 +6,9 @@
 * View detailed book information (title, description, image, author, published, year, pages, total score)
 * Search books by author, publisher, year
 * Search books by keyword from description
-* User registration and authorization 
+* Users registration and authorization 
 * Authorizated users can leave feedback for the book(text, rating)
-* Get all book feedbacks
+* Get all feedbacks for book 
 * Get paged list of the books
 * Get paged list of the feedbaks for book
 
