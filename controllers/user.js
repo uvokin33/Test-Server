@@ -40,7 +40,7 @@ register = function(req, res){
                     console.log(error);
                     return res.sendStatus(500);
                 }
-                res.sendStatus(200);
+                res.status(200).json({message: 'user created'});
             });
         }else
             res.sendStatus(500);        
@@ -54,7 +54,8 @@ authorisation = function(req, res){
             return res.sendStatus(500);
         }
         req.session.user = result[0]._id;
-        res.send(result);
+        //res.send(result);
+        res.status(200).json({message: 'user authorized'});
         req.session.save(function(error){
             if(error){
                 console.log(error);
@@ -70,7 +71,7 @@ update = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
-        res.sendStatus(200);
+        res.status(200).json({message: 'user updated'});
     });
 }
 
@@ -80,7 +81,7 @@ deleteUser = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
-        res.sendStatus(200);
+        res.status(200).json({message: 'user deleted'});
     });
 }
 

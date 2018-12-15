@@ -17,7 +17,6 @@ app.use(body_parser.urlencoded({extended: true}));
 app.use(body_parser.json());
 
 app.get('/', function(req, res){
-    console.log(req.session);
     if(req.session.user != null)
         res.send('user');
     else
@@ -26,6 +25,10 @@ app.get('/', function(req, res){
 
 app.use('/books', require('./controllers/book').router);
 app.use('/users', require('./controllers/user').router);
+
+app.use(function(req, res){
+    res.status(404).json({message: 'page not found'});
+});
 
 database.connect(database_url, database_name, function(error) {
     if(error)

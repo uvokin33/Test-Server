@@ -107,7 +107,7 @@ feedback = function(req, res){
                     console.log(error);
                     return res.sendStatus(500);
                 }
-                res.sendStatus(200);
+                res.status(200).json({message: 'feedback sended'});
             });
         });
     }else{
@@ -153,7 +153,7 @@ search = function(req, res){
             var send = [];
             for(var i = 0; i < data.length; i++)
                 send.push({_id: data[i]._id, title: data[i].title});
-            console.log(send);
+            //console.log(send);
             res.send(send);
         });
     }
@@ -165,7 +165,7 @@ add = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
-        res.sendStatus(200);
+        res.status(200).json({message: 'book created'});
     });
 }
 
@@ -177,7 +177,7 @@ update = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
-        res.sendStatus(200);
+        res.status(200).json({message: 'book updated'});
     });
 }
 
@@ -187,7 +187,7 @@ deleteBook = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
-        res.sendStatus(200);
+        res.status(200).json({message: 'book deleted'});
     });
 }
 
