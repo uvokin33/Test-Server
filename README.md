@@ -23,8 +23,8 @@ npm start
 ## Usage ##
 
 ```
-post request to '/books/' - add book (params title, description, image, author, publisher, year, pages)  
-put request to '/books/:id' - update book (params title, description, image, author, publisher, year, pages)  
+post request to '/books/' - add book (title, description, image, author, publisher, year, pages)  
+put request to '/books/:id' - update book (title, description, image, author, publisher, year, pages)  
 delete request to '/books/:id' - delete book  
 ```
 
