@@ -8,9 +8,9 @@
 * Search books by keyword from description
 * Users registration and authorization 
 * Authorizated users can leave feedback for the book(text, rating)
-* Get all feedbacks for book 
-* Get paged list of the books
-* Get paged list of the feedbaks for book
+* Get all feedbacks for the book 
+* Get paged list of books
+* Get paged list of the feedbaks for the book
 
 ## Instalation ##
 
