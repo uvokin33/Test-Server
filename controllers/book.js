@@ -1,5 +1,6 @@
 const ObjectID = require('mongodb').ObjectID;
 const express = require('express');
+const session = require('express-session');
 const router = express.Router();
 const database = require('../database');
 
@@ -30,15 +31,64 @@ getTitles = function(req, res) {
 }
 
 getByID = function(req, res){
-    console.log(req.params.id);
     database.get().collection(collection).findOne({_id: ObjectID(req.params.id)}, function(error, data){
         if(error){
             console.log(error);
             return res.sendStatus(500);
-        }
-        if(data != null)
-            res.send(data);
+        }       
+        res.send(data);
     });
+}
+
+feedback = function(req, res){
+    if(req.session.user != null){
+        database.get().collection(collection).findOne({_id: ObjectID(req.params.id)}, function(error, data){
+            if(error){
+                console.log(error);
+                return res.sendStatus(500);
+            }
+
+            var feedback = data.feedback;
+            feedback.text.push({
+                user: req.session.user,
+                text: req.body.text
+            });
+
+            if(req.body.rating != null){
+                if(data['feedback'].rating.length < 1){
+                    feedback.rating.push({
+                        user: req.session.user,
+                        rating: req.body.rating
+                    });
+                }else{
+                    for(var i = 0; i < data['feedback'].rating.length; i++){
+                        if(data['feedback'].rating[i].user !== req.session.user){
+                            feedback.rating.push({
+                                user: req.session.user,
+                                rating: req.body.rating
+                            });                 
+                        }
+                    }
+                }
+            }
+
+            var total_rating = 0;
+            for(var i = 0; i < feedback['rating'].length; i++){
+                total_rating += Number(feedback['rating'][i].rating);
+            }
+            total_rating /= feedback['rating'].length;
+            
+            database.get().collection(collection).updateOne({_id: ObjectID(req.params.id)}, {$set: {feedback}, $set: {total_rating: total_rating}}, function(error, result){
+                if(error){
+                    console.log(error);
+                    return res.sendStatus(500);
+                }
+                res.sendStatus(200);
+            });
+        });
+    }else{
+        res.sendStatus(500);
+    }
 }
 
 search = function(req, res){
@@ -141,26 +191,9 @@ book_dictionary = function(req){
         publisher: req.body.publisher,
         year: req.body.year,
         pages: req.body.pages,
-        feedback: {
-            text: req.body.feedback.text,
-            rating: req.body.feedback.rating
-        }
+        total_rating: 0,
+        feedback: {text: [], rating: []}
     }
-
-    if(book.title == null)
-        book.title = 'unknown';
-    if(book.description == null)
-        book.description = 'unknown';
-    if(book.image == null)
-        book.image = 'default.jpg';
-    if(book.author == null)
-        book.author = 'unknown';
-    if(book.publisher == null)
-        book.publisher = 'unknown';
-    if(book.year == null)
-        book.year = 'unknown';
-    if(book.pages == null)
-        book.pages = 'unknown';
 
     return book;
 }
@@ -174,5 +207,9 @@ router.get('/all', get);
 router.get('/list', getTitles);
 router.get('/list/page/:id', getPages);
 router.get('/:id', getByID);
+router.post('/:id', feedback);
 
-module.exports = router;
+module.exports = {
+    router,
+    session
+}

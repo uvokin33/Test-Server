@@ -24,7 +24,7 @@ app.get('/', function(req, res){
         res.send('guest');
 });
 
-app.use('/books', require('./controllers/book'));
+app.use('/books', require('./controllers/book').router);
 app.use('/users', require('./controllers/user').router);
 
 database.connect(database_url, database_name, function(error) {

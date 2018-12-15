@@ -33,6 +33,7 @@ register = function(req, res){
             return res.sendStatus(500);
         }
         console.log(data);
+        console.log(data.length);
         if(data.length == 0){
             database.get().collection(collection).insertOne(user_dictionary(req), function(error, result){
                 if(error){
