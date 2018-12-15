@@ -35,8 +35,32 @@ getByID = function(req, res){
         if(error){
             console.log(error);
             return res.sendStatus(500);
-        }       
-        res.send(data);
+        }   
+            
+        if(req.query.page == null){
+            res.send(data);
+        }else{
+            var page = [];
+            page.push({
+                title: data.title,
+                description: data.description,
+                author: data.author,
+                publisher: data.publisher,
+                year: data.year,
+                pages: data.pages,
+                total_rating: data.total_rating,
+                feedback: []
+            });
+            for(var i = 0; i < 3; i++){
+                if(data.feedback.text[3 * Number(req.query.page) + i] != null){
+                    page[0].feedback.push({
+                        user: data.feedback.text[3 * Number(req.query.page) + i].user, 
+                        text: data.feedback.text[3 * Number(req.query.page) + i].text
+                    });
+                }
+            }
+            res.send(page);
+        }
     });
 }
 
