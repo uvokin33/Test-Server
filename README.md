@@ -22,6 +22,7 @@ npm start
 
 ## Usage ##
 
+Books
 ```
 post request to '/books/' - add book (title, description, image, author, publisher, year, pages)  
 put request to '/books/:id' - update book (title, description, image, author, publisher, year, pages)  
@@ -42,7 +43,7 @@ get request to '/books/:id?page=' - get page with feedbacks (3 feedback on page)
 
 post request to '/:id' - if user is authorized send feedback for the book
 ```
-
+Users
 ```
 get request to '/users/' - get all users  
 get request to '/users/:id' - get selected user  
