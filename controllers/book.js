@@ -78,6 +78,7 @@ feedback = function(req, res){
                 text: req.body.text
             });
 
+            var total_rating = 0;
             if(req.body.rating != null){
                 if(data['feedback'].rating.length < 1){
                     feedback.rating.push({
@@ -85,24 +86,42 @@ feedback = function(req, res){
                         rating: req.body.rating
                     });
                 }else{
-                    for(var i = 0; i < data['feedback'].rating.length; i++){
-                        if(data['feedback'].rating[i].user !== req.session.user){
-                            feedback.rating.push({
-                                user: req.session.user,
-                                rating: req.body.rating
-                            });                 
+                    var exists = false;
+
+                    for(var i = 0; i < data['feedback'].rating.length; i++)
+                        if(data['feedback'].rating[i].user === req.session.user){
+                            exists = true;
+                            break;
+                        }
+
+                    console.log(exists);
+
+                    if(!exists){
+                        for(var i = 0; i < data['feedback'].rating.length; i++){
+
+                            if(data['feedback'].rating[i].user !== req.session.user){
+                                feedback.rating.push({
+                                    user: req.session.user,
+                                    rating: req.body.rating
+                                });                 
+                            }
                         }
                     }
                 }
-            }
 
-            var total_rating = 0;
-            for(var i = 0; i < feedback['rating'].length; i++){
-                total_rating += Number(feedback['rating'][i].rating);
+                for(var i = 0; i < feedback['rating'].length; i++){
+                    total_rating += Number(feedback['rating'][i].rating);
+                }
+                total_rating /= feedback['rating'].length;
             }
-            total_rating /= feedback['rating'].length;
             
-            database.get().collection(collection).updateOne({_id: ObjectID(req.params.id)}, {$set: {feedback}, $set: {total_rating: total_rating}}, function(error, result){
+            database.get().collection(collection).updateOne({_id: ObjectID(req.params.id)}, {$set: {feedback}}, function(error, result){
+                if(error){
+                    console.log(error);
+                    return res.sendStatus(500);
+                } 
+            });
+            database.get().collection(collection).updateOne({_id: ObjectID(req.params.id)}, {$set: {total_rating: total_rating}}, function(error, result){
                 if(error){
                     console.log(error);
                     return res.sendStatus(500);
@@ -111,7 +130,7 @@ feedback = function(req, res){
             });
         });
     }else{
-        res.sendStatus(500);
+        res.status(500).json({message: 'guests can\'t send feedback'});
     }
 }
 
@@ -153,7 +172,6 @@ search = function(req, res){
             var send = [];
             for(var i = 0; i < data.length; i++)
                 send.push({_id: data[i]._id, title: data[i].title});
-            //console.log(send);
             res.send(send);
         });
     }
@@ -216,7 +234,10 @@ book_dictionary = function(req){
         year: req.body.year,
         pages: req.body.pages,
         total_rating: 0,
-        feedback: {text: [], rating: []}
+        feedback: {
+            text: [], 
+            rating: []
+        }
     }
 
     return book;
@@ -228,8 +249,8 @@ router.delete('/:id', deleteBook);
 
 router.get('/search', search);
 router.get('/all', get);
-router.get('/list', getTitles);
-router.get('/list/page/:id', getPages);
+router.get('/', getTitles);
+router.get('/page/:id', getPages);
 router.get('/:id', getByID);
 router.post('/:id', feedback);
 
