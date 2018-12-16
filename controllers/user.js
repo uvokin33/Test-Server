@@ -53,15 +53,20 @@ authorisation = function(req, res){
             console.log(error);
             return res.sendStatus(500);
         }
-        req.session.user = result[0]._id;
-        //res.send(result);
-        res.status(200).json({message: 'user authorized'});
-        req.session.save(function(error){
-            if(error){
-                console.log(error);
-                return res.sendStatus(500);
-            }
-        });
+        if(result[0] != null){
+            req.session.user = result[0]._id;
+            //res.send(result);
+            res.status(200).json({message: 'user authorized'});
+            req.session.save(function(error){
+                if(error){
+                    console.log(error);
+                    return res.sendStatus(500);
+                }
+            });
+        }else{
+            res.status(404).json({message: 'user not found'});
+        }
+        
     });
 }
 
