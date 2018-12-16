@@ -36,8 +36,8 @@ get request to '/books/search?description=' - search book by keyword in descript
 
 ```
 get request to '/books/all' - show books list with all info  
-get request to '/books/list' - show books titles and id  
-get request to '/books/list/page/:id' - get page with books (3 books on page)
+get request to '/books' - show books titles and id  
+get request to '/books/page/:id' - get page with books (3 books on page)
 get request to '/books/:id' - show detailed info for selected book  
 get request to '/books/:id?page=' - get page with feedbacks (3 feedback on page)
 
